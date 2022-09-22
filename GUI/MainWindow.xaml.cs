@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,13 +35,23 @@ namespace GUI
 
         private void SearchByAcctNumBtn_Click(object sender, RoutedEventArgs e)
         {
+            errorMessages.Text = string.Empty;
             RestRequest request = new RestRequest("api/search/{id}");
             request.AddUrlSegment("id", SearchBox.Text);
             RestResponse response = client.Execute(request);
 
             Customer customer = JsonConvert.DeserializeObject<Customer>(response.Content);
-            PopulateCustomerData(customer);
-            // If statement, if customer is null
+            
+            if (customer == null)
+            {
+                errorMessages.Text = "Customer not found!";
+            }
+            else
+            {
+                PopulateCustomerData(customer);
+                errorMessages.Text = "Customer found!";
+            }
+
         }
 
         private void GenerateDatabaseBtn_Click(object sender, RoutedEventArgs e)
@@ -52,12 +63,20 @@ namespace GUI
 
         private void PopulateCustomerData(Customer customer)
         {
-            AcctNumBox.Text = customer.AccountNumber.ToString();
-            FirstNameBox.Text = customer.FirstName;
-            LastNameBox.Text = customer.LastName;
-            BalanceBox.Text = customer.Balance.ToString();
-            Pin_Number_Box.Text = customer.PinNumber;
-            ProfilePicImage.Source = GetImageFromByteArray(customer.ProfilePicture);
+            try
+            {
+                AcctNumBox.Text = customer.AccountNumber.ToString();
+                FirstNameBox.Text = customer.FirstName;
+                LastNameBox.Text = customer.LastName;
+                BalanceBox.Text = customer.Balance.ToString();
+                Pin_Number_Box.Text = customer.PinNumber;
+                ProfilePicImage.Source = GetImageFromByteArray(customer.ProfilePicture);
+            }
+            catch (NullReferenceException)
+            {
+                errorMessages.Text = "Customer not found!";
+            }
+            
         }
 
         private BitmapImage GetImageFromByteArray(byte[] byteArray)
@@ -76,45 +95,99 @@ namespace GUI
 
         private void AddCustomerBtn_Click(object sender, RoutedEventArgs e)
         {
+            errorMessages.Text = string.Empty;
             RestRequest request = new RestRequest("api/search", Method.Post);
             Customer customer = CreateCustomerByInput();
-            request.AddJsonBody(JsonConvert.SerializeObject(customer));
-            RestResponse response = client.Execute(request);
 
-            Customer returnCustomer = JsonConvert.DeserializeObject<Customer>(response.Content);
-            
+            if (customer != null)
+            {
+                request.AddJsonBody(JsonConvert.SerializeObject(customer));
+                RestResponse response = client.Execute(request);
+
+                Customer returnCustomer = JsonConvert.DeserializeObject<Customer>(response.Content);
+
+                if (returnCustomer == null)
+                {
+                    errorMessages.Text = "Existing customer has same Account Number! Customer not added.";
+                }
+                else
+                {
+                    errorMessages.Text = "Customer added!";
+                }
+            }
         }
 
         private void DeleteByAcctNumBtn_Click(object sender, RoutedEventArgs e)
         {
+            errorMessages.Text = string.Empty;
             RestRequest request = new RestRequest("api/search/{id}", Method.Delete);
             request.AddUrlSegment("id", DeleteBox.Text);
             RestResponse response = client.Execute(request);
 
             Customer customer = JsonConvert.DeserializeObject<Customer>(response.Content);
+
+            if (customer == null)
+            {
+                errorMessages.Text = "Customer not found! Delete failed.";
+            }
+            else
+            {
+                errorMessages.Text = "Customer deleted!";
+            }
         }
 
         private void UpdateCustomerBtn_Click(object sender, RoutedEventArgs e)
         {
+            errorMessages.Text = string.Empty;
             int id = Int32.Parse(AcctNumBox.Text);
             Customer customer = CreateCustomerByInput();
 
-            RestRequest request = new RestRequest("api/search/{id}", Method.Put);
-            request.AddUrlSegment("id", id);
-            request.AddJsonBody(JsonConvert.SerializeObject(customer));
-            RestResponse response = client.Execute(request);
+            if (customer != null)
+            {
+                RestRequest request = new RestRequest("api/search/{id}", Method.Put);
+                request.AddUrlSegment("id", id);
+                request.AddJsonBody(JsonConvert.SerializeObject(customer));
+                RestResponse response = client.Execute(request);
 
-            Customer returnCustomer = JsonConvert.DeserializeObject<Customer>(response.Content);
+                Customer returnCustomer = JsonConvert.DeserializeObject<Customer>(response.Content);
+
+                if (returnCustomer == null)
+                {
+                    errorMessages.Text = "Customer not found! Update failed.";
+                }
+                else
+                {
+                    errorMessages.Text = "Customer data updated!";
+                }
+            }
+            
         }
         private Customer CreateCustomerByInput()
         {
-            Customer customer = new Customer();
-            customer.AccountNumber = Int32.Parse(AcctNumBox.Text);
-            customer.FirstName = FirstNameBox.Text;
-            customer.LastName = LastNameBox.Text;
-            customer.PinNumber = Pin_Number_Box.Text;
-            customer.Balance = Int32.Parse(BalanceBox.Text);
-            return customer;
+            try
+            {
+                if (ProfilePicImage.Source == null)
+                {
+                    errorMessages.Text = "Please upload a profile picture.";
+                    return null;
+                }
+                else
+                {
+                    Customer customer = new Customer();
+                    customer.AccountNumber = Int32.Parse(AcctNumBox.Text);
+                    customer.FirstName = FirstNameBox.Text;
+                    customer.LastName = LastNameBox.Text;
+                    customer.PinNumber = Pin_Number_Box.Text;
+                    customer.Balance = (decimal?)Double.Parse(BalanceBox.Text);
+                    customer.ProfilePicture = Converter(ProfilePicImage.Source);
+                    return customer;
+                }  
+            }
+            catch (FormatException)
+            {
+                errorMessages.Text = "Please check format of entered fields.";
+                return null;
+            }
         }
 
         private void AddPictureBtn_Click(object sender, RoutedEventArgs e)
@@ -128,6 +201,25 @@ namespace GUI
             {
                 ProfilePicImage.Source = new BitmapImage(new Uri(op.FileName));
             }
+        }
+
+        private byte[] Converter(ImageSource bitmap)
+        {
+            byte[] buffer = null;
+            var bitmapSource = bitmap as BitmapSource;
+
+            if (bitmap != null)
+            {
+                var encoder = new JpegBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+
+                using (var stream = new MemoryStream())
+                {
+                    encoder.Save(stream);
+                    buffer = stream.ToArray();
+                }
+            }
+            return buffer;
         }
     }
 }

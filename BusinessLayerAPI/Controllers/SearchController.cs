@@ -43,7 +43,7 @@ namespace BusinessLayerAPI.Controllers
         }
 
         // PUT: api/Search/5
-        public void Put(int id, [FromBody]Customer customer)
+        public Customer Put(int id, [FromBody]Customer customer)
         {
             RestRequest request = new RestRequest("api/customers/{id}", Method.Put);
             request.AddUrlSegment("id", id);
@@ -51,16 +51,19 @@ namespace BusinessLayerAPI.Controllers
             RestResponse response = client.Execute(request);
 
             Customer returnCustomer = JsonConvert.DeserializeObject<Customer>(response.Content);
+            return returnCustomer;
         }
 
         // DELETE: api/Search/5
-        public void Delete(int id)
+        public Customer Delete(int id)
         {
             RestRequest request = new RestRequest("api/customers/{id}", Method.Delete);
             request.AddUrlSegment("id", id);
             RestResponse response = client.Execute(request);
 
             Customer customer = JsonConvert.DeserializeObject<Customer>(response.Content);
+
+            return customer;
         }
     }
 }
