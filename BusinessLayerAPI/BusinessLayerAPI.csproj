@@ -210,6 +210,12 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="profpic1.jpg" />
+    <Content Include="profpic2.jpg" />
+    <Content Include="profpic3.jpg" />
+    <Content Include="profpic4.jpg" />
+    <Content Include="profpic5.jpg" />
+    <Content Include="profpic6.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />

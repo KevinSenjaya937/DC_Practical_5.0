@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CustomerDatabaseAPI.Models;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -28,8 +30,6 @@ namespace GUI
         public MainWindow()
         {
             InitializeComponent();
-            
-            
         }
 
         private void SearchByAcctNumBtn_Click(object sender, RoutedEventArgs e)
@@ -57,6 +57,21 @@ namespace GUI
             LastNameBox.Text = customer.LastName;
             BalanceBox.Text = customer.Balance.ToString();
             Pin_Number_Box.Text = customer.PinNumber;
+            ProfilePicImage.Source = GetImageFromByteArray(customer.ProfilePicture);
+        }
+
+        private BitmapImage GetImageFromByteArray(byte[] byteArray)
+        {
+            using (var ms = new System.IO.MemoryStream(byteArray))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = ms;
+                image.EndInit();
+
+                return image;
+            }
         }
 
         private void AddCustomerBtn_Click(object sender, RoutedEventArgs e)
@@ -102,6 +117,17 @@ namespace GUI
             return customer;
         }
 
-        
+        private void AddPictureBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog op = new OpenFileDialog();
+            op.Title = "Select a picture";
+            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+                        "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                        "Portable Network Graphic (*.png)|*.png";
+            if (op.ShowDialog() == true)
+            {
+                ProfilePicImage.Source = new BitmapImage(new Uri(op.FileName));
+            }
+        }
     }
 }

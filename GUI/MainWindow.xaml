@@ -12,8 +12,8 @@
         <TextBlock HorizontalAlignment="Left" Margin="285,94,0,0" TextWrapping="Wrap" Text="Last Name :" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="285,121,0,0" TextWrapping="Wrap" Text="Balance :" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="285,148,0,0" TextWrapping="Wrap" Text="Pin Number :" VerticalAlignment="Top"/>
-        <Image x:Name="ProfilePicImage" HorizontalAlignment="Left" Height="100" Margin="144,40,0,0" VerticalAlignment="Top" Width="100"/>
-        <Button x:Name="AddPictureBtn" Content="Add Profile Picture" HorizontalAlignment="Left" Margin="130,151,0,0" VerticalAlignment="Top"/>
+        <Image x:Name="ProfilePicImage" HorizontalAlignment="Left" Height="100" Margin="130,40,0,0" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="AddPictureBtn" Content="Add Profile Picture" HorizontalAlignment="Left" Margin="130,151,0,0" VerticalAlignment="Top" Click="AddPictureBtn_Click"/>
         <TextBox x:Name="AcctNumBox" HorizontalAlignment="Left" Margin="426,39,0,0" TextWrapping="Wrap" Text="Acct Num" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="FirstNameBox" HorizontalAlignment="Left" Margin="426,66,0,0" TextWrapping="Wrap" Text="First Name" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="LastNameBox" HorizontalAlignment="Left" Margin="426,93,0,0" TextWrapping="Wrap" Text="Last Name" VerticalAlignment="Top" Width="120"/>

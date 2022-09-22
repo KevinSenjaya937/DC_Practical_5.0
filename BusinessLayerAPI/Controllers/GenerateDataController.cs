@@ -7,6 +7,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using CustomerDatabaseAPI.Models;
+using System.IO;
+using System.Drawing;
 
 namespace BusinessLayerAPI.Controllers
 {
@@ -21,7 +23,7 @@ namespace BusinessLayerAPI.Controllers
         private uint[] pins = { 1111, 2222, 3333, 4444, 5555, 6666 };
         private uint[] acctNos = { 000001, 000002, 000003, 000004, 000005, 000006 };
         private int[] balances = { -100, 0, 2000, 3000, 50000, 100000 };
-        private string[] profPicPaths = { "~/Content/profpic1.jpg", "~/Content/profpic2.jpg", "~/Content/profpic3.jpg", "~/Content/profpic4.jpg", "~/Content/profpic5.jpg", "~/Content/profpic6.jpg"};
+        private string[] profPicPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.jpg");
 
         [Route("generate")]
         [HttpGet]
@@ -53,12 +55,20 @@ namespace BusinessLayerAPI.Controllers
             customer.FirstName = firstnames[GenerateRandNum()];
             customer.LastName = lastnames[GenerateRandNum()];
             customer.Balance = balances[GenerateRandNum()];
+            customer.ProfilePicture = Converter(Image.FromFile(profPicPaths[GenerateRandNum()]));
             return customer;
         }
 
         private int GenerateRandNum()
         {
             return rand.Next(0, 5);
+        }
+
+        private byte[] Converter(Image image)
+        {
+            ImageConverter imageConverter = new ImageConverter();
+            byte[] bytes = (byte[])imageConverter.ConvertTo(image, typeof(byte[]));
+            return bytes;
         }
     }
 }
