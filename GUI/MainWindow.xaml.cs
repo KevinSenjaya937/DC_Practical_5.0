@@ -70,7 +70,7 @@ namespace GUI
                 LastNameBox.Text = customer.LastName;
                 BalanceBox.Text = customer.Balance.ToString();
                 Pin_Number_Box.Text = customer.PinNumber;
-                ProfilePicImage.Source = GetImageFromByteArray(customer.ProfilePicture);
+                
             }
             catch (NullReferenceException)
             {
@@ -179,7 +179,7 @@ namespace GUI
                     customer.LastName = LastNameBox.Text;
                     customer.PinNumber = Pin_Number_Box.Text;
                     customer.Balance = (decimal?)Double.Parse(BalanceBox.Text);
-                    customer.ProfilePicture = Converter(ProfilePicImage.Source);
+                    
                     return customer;
                 }  
             }

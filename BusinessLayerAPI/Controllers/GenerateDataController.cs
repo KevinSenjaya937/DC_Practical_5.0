@@ -55,7 +55,8 @@ namespace BusinessLayerAPI.Controllers
             customer.FirstName = firstnames[GenerateRandNum()];
             customer.LastName = lastnames[GenerateRandNum()];
             customer.Balance = balances[GenerateRandNum()];
-            customer.ProfilePicture = Converter(Image.FromFile(profPicPaths[GenerateRandNum()]));
+            string profPicName = profPicPaths[GenerateRandNum()];
+            customer.ProfilePicture = "images/" + Path.GetFileName(profPicName);
             return customer;
         }
 

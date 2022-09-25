@@ -19,6 +19,6 @@ namespace CustomerDatabaseAPI.Models
         public string LastName { get; set; }
         public string PinNumber { get; set; }
         public Nullable<decimal> Balance { get; set; }
-        public byte[] ProfilePicture { get; set; }
+        public string ProfilePicture { get; set; }
     }
 }

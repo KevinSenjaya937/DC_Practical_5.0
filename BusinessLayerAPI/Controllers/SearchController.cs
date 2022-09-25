@@ -15,9 +15,13 @@ namespace BusinessLayerAPI.Controllers
         private static string URL = "http://localhost:50915/";
         private static RestClient client = new RestClient(URL);
         // GET: api/Search
-        public IEnumerable<string> Get()
+        public List<Customer> Get()
         {
-            return null;
+            RestRequest request = new RestRequest("api/customers/", Method.Get);
+            RestResponse response = client.Execute(request);
+
+            List<Customer>customers = JsonConvert.DeserializeObject<List<Customer>>(response.Content);
+            return customers;
         }
 
         // GET: api/Search/5

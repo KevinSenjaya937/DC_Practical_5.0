@@ -14,7 +14,7 @@
           <Property Name="LastName" Type="varchar" MaxLength="50" />
           <Property Name="PinNumber" Type="varchar" MaxLength="50" />
           <Property Name="Balance" Type="money" />
-          <Property Name="ProfilePicture" Type="image" />
+          <Property Name="ProfilePicture" Type="varchar(max)" />
         </EntityType>
         <EntityContainer Name="CustomerDBModelStoreContainer">
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
@@ -33,9 +33,9 @@
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="PinNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Balance" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ProfilePicture" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="ProfilePicture" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityContainer Name="CustomerDBEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="CustomerDBEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Customers" EntityType="Self.Customer" />
         </EntityContainer>
       </Schema>
@@ -43,7 +43,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="CustomerDBModelStoreContainer" CdmEntityContainer="CustomerDBEntities">
+        <EntityContainerMapping StorageEntityContainer="CustomerDBModelStoreContainer" CdmEntityContainer="CustomerDBEntities1">
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="CustomerDBModel.Customer">
               <MappingFragment StoreEntitySet="Customers">

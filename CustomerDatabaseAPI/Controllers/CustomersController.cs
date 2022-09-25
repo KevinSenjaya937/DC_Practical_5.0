@@ -14,7 +14,7 @@ namespace CustomerDatabaseAPI.Controllers
 {
     public class CustomersController : ApiController
     {
-        private CustomerDBEntities db = new CustomerDBEntities();
+        private CustomerDBEntities1 db = new CustomerDBEntities1();
 
         // GET: api/Customers
         public IQueryable<Customer> GetCustomers()

@@ -13,10 +13,10 @@ namespace CustomerDatabaseAPI.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class CustomerDBEntities : DbContext
+    public partial class CustomerDBEntities1 : DbContext
     {
-        public CustomerDBEntities()
-            : base("name=CustomerDBEntities")
+        public CustomerDBEntities1()
+            : base("name=CustomerDBEntities1")
         {
         }
     

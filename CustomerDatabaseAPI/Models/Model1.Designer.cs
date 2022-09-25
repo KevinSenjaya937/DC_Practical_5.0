@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Kevin Senjaya\OneDrive\Desktop\Prac 5\DC_Practical_5-master\CustomerDatabaseAPI\Models\Customers.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\Kevin Senjaya\Source\Repos\DC_Practical_6\CustomerDatabaseAPI\Models\Model1.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
